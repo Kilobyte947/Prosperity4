@@ -119,22 +119,14 @@ logger = Logger()
 #     inside) instead of crossing the spread.
 # ──────────────────────────────────────────────────────────────────────────
 class Trader:
-    # 10 product groups of 5 (= 50 products)
+    # Active product groups (OXYGEN_SHAKE, SLEEP_POD, GALAXY_SOUNDS, PANEL
+    # are intentionally excluded — disabled per user request).
     GROUPS = {
-        "GALAXY_SOUNDS": ["GALAXY_SOUNDS_BLACK_HOLES", "GALAXY_SOUNDS_DARK_MATTER",
-                          "GALAXY_SOUNDS_PLANETARY_RINGS", "GALAXY_SOUNDS_SOLAR_FLAMES",
-                          "GALAXY_SOUNDS_SOLAR_WINDS"],
         "MICROCHIP":     ["MICROCHIP_CIRCLE", "MICROCHIP_OVAL", "MICROCHIP_RECTANGLE",
                           "MICROCHIP_SQUARE", "MICROCHIP_TRIANGLE"],
-        "OXYGEN_SHAKE":  ["OXYGEN_SHAKE_CHOCOLATE", "OXYGEN_SHAKE_EVENING_BREATH",
-                          "OXYGEN_SHAKE_GARLIC", "OXYGEN_SHAKE_MINT",
-                          "OXYGEN_SHAKE_MORNING_BREATH"],
-        "PANEL":         ["PANEL_1X2", "PANEL_1X4", "PANEL_2X2", "PANEL_2X4", "PANEL_4X4"],
         "PEBBLES":       ["PEBBLES_L", "PEBBLES_M", "PEBBLES_S", "PEBBLES_XL", "PEBBLES_XS"],
         "ROBOT":         ["ROBOT_DISHES", "ROBOT_IRONING", "ROBOT_LAUNDRY",
                           "ROBOT_MOPPING", "ROBOT_VACUUMING"],
-        "SLEEP_POD":     ["SLEEP_POD_COTTON", "SLEEP_POD_LAMB_WOOL", "SLEEP_POD_NYLON",
-                          "SLEEP_POD_POLYESTER", "SLEEP_POD_SUEDE"],
         "SNACKPACK":     ["SNACKPACK_CHOCOLATE", "SNACKPACK_PISTACHIO", "SNACKPACK_RASPBERRY",
                           "SNACKPACK_STRAWBERRY", "SNACKPACK_VANILLA"],
         "TRANSLATOR":    ["TRANSLATOR_ASTRO_BLACK", "TRANSLATOR_ECLIPSE_CHARCOAL",
@@ -147,7 +139,7 @@ class Trader:
     # ── EWMA z-score parameters ───────────────────────────────────────
     HALF_LIFE = 300                              # ticks
     DECAY     = 0.5 ** (1.0 / HALF_LIFE)         # ≈ 0.99769
-    MIN_OBS   = 500                              # warmup before z is trusted
+    MIN_OBS   = 200                              # warmup before z is trusted
 
     # ── Cross-sectional selection ─────────────────────────────────────
     TOP_K     = 2
@@ -157,8 +149,8 @@ class Trader:
     EXIT_Z    = 0.3
 
     # ── Position sizing (scaled by |z|) ───────────────────────────────
-    BASE_LOT  = 2        # size at |z| == Z_NORM
-    Z_NORM    = 2.0
+    BASE_LOT  = 10        # size at |z| == Z_NORM
+    Z_NORM    = 3.0
     MAX_LOT   = 10        # absolute cap (preserves the original ±10 budget)
 
     def __init__(self):
